@@ -1,6 +1,8 @@
 import os
 import asyncio
 import logging
+import http.server
+import threading
 from dotenv import load_dotenv
 from telethon import TelegramClient, events
 from telethon.tl.types import InputMediaPhoto, InputMediaDocument
@@ -152,12 +154,24 @@ async def handler(event):
         except Exception as e:
             logging.error(f"Помилка публікації: {e}")
 
+def run_fake_server():
+    """Фейковий сервер для обману Render, щоб він бачив відкритий порт"""
+    server_address = ('', int(os.getenv("PORT", 10000)))
+    httpd = http.server.HTTPServer(server_address, http.server.SimpleHTTPRequestHandler)
+    logging.info(f"Фейковий веб-сервер запущено на порту {server_address[1]}")
+    httpd.serve_forever()
+
 async def main():
+    # Запуск фейкового сервера в окремому потоці, щоб не заважав боту
+    threading.Thread(target=run_fake_server, daemon=True).start()
+
     # Запуск обох клієнтів
     await user_client.start()
     await bot_client.start(bot_token=BOT_TOKEN)
     logging.info("Скрипт запущений і слухає канали...")
     await user_client.run_until_disconnected()
 
+if __name__ == '__main__':
+    asyncio.run(main())
 if __name__ == '__main__':
     asyncio.run(main())
