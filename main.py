@@ -22,9 +22,9 @@ TARGET_CHANNEL = "@aiworldgptnews"
 
 # Список каналів-доноров (6 штук). Заміни юзернейми на ті, які тобі треба!
 DONOR_CHANNELS = [
-    "gpt_news", 
-    "strangedalle", 
-    "tech_donor_2", 
+    "@gpt_news", 
+    "@strangedalle", 
+    "https://t.me/gpt_news", 
     "tech_donor_3", 
     "tech_donor_4", 
     "tech_donor_5"
